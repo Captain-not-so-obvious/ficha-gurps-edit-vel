@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 600" width="100%" height="100%">
+  <!-- Outline of Male Body Silhouette -->
+  <g fill="none" stroke="#111" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Head -->
+    <ellipse cx="150" cy="55" rx="23" ry="29" fill="#f8f9fa" />
+    <!-- Neck -->
+    <path d="M140 80 L140 100 M160 80 L160 100" stroke-width="2.5" />
+    <!-- Shoulders & Arms -->
+    <path d="M140 100 Q105 105 85 130 L65 225 L80 227 L98 150 L110 145" fill="#fafafa"/>
+    <path d="M160 100 Q195 105 215 130 L235 225 L220 227 L202 150 L190 145" fill="#fafafa"/>
+    <!-- Hands -->
+    <ellipse cx="62" cy="240" rx="8" ry="13" fill="#eee"/>
+    <ellipse cx="238" cy="240" rx="8" ry="13" fill="#eee"/>
+    <!-- Torso / Chest / Waist -->
+    <path d="M110 145 L108 210 Q118 245 125 285 L175 285 Q182 245 192 210 L190 145 Z" fill="#f8f8f8"/>
+    <!-- Pecs accent -->
+    <path d="M115 170 L150 180 L185 170" stroke-width="1.2" stroke="#666"/>
+    <!-- Legs -->
+    <path d="M125 285 Q127 365 128 455 L125 545 L144 545 L147 455 Q148 365 148 285 Z" fill="#fafafa"/>
+    <path d="M175 285 Q173 365 172 455 L175 545 L156 545 L153 455 Q152 365 152 285 Z" fill="#fafafa"/>
+    <!-- Feet -->
+    <path d="M125 545 L116 570 L144 570 L144 545 Z" fill="#eee"/>
+    <path d="M175 545 L184 570 L156 570 L156 545 Z" fill="#eee"/>
+  </g>
+</svg>

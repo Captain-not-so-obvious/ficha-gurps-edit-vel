@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 600" width="100%" height="100%">
+  <!-- Outline of Female Body Silhouette -->
+  <g fill="none" stroke="#111" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Head -->
+    <ellipse cx="150" cy="55" rx="22" ry="28" fill="#f8f9fa" />
+    <!-- Neck -->
+    <path d="M142 80 L142 98 M158 80 L158 98" />
+    <!-- Shoulders & Arms -->
+    <path d="M142 98 Q115 102 95 125 L75 220 L88 222 L105 145 L115 140" fill="#fafafa"/>
+    <path d="M158 98 Q185 102 205 125 L225 220 L212 222 L195 145 L185 140" fill="#fafafa"/>
+    <!-- Hands -->
+    <ellipse cx="71" cy="235" rx="7" ry="12" fill="#eee"/>
+    <ellipse cx="229" cy="235" rx="7" ry="12" fill="#eee"/>
+    <!-- Torso / Chest / Waist / Hips -->
+    <path d="M115 140 Q110 170 120 200 Q105 240 120 280 L180 280 Q195 240 180 200 Q190 170 185 140 Z" fill="#f8f8f8"/>
+    <!-- Bust accent -->
+    <path d="M120 165 Q150 185 180 165" stroke-width="1.2" stroke="#666"/>
+    <!-- Legs -->
+    <path d="M120 280 Q122 360 125 450 L123 540 L142 540 L145 450 Q148 360 148 280 Z" fill="#fafafa"/>
+    <path d="M180 280 Q178 360 175 450 L177 540 L158 540 L155 450 Q152 360 152 280 Z" fill="#fafafa"/>
+    <!-- Feet -->
+    <path d="M123 540 L115 565 L142 565 L142 540 Z" fill="#eee"/>
+    <path d="M177 540 L185 565 L158 565 L158 540 Z" fill="#eee"/>
+  </g>
+</svg>

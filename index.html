@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ficha Interativa GURPS 4ª Edição</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Application Navigation & Action Toolbar -->
+  <header class="app-toolbar">
+    <div class="toolbar-title">
+      🎲 GURPS 4e <span>Ficha Interativa</span>
+    </div>
+    <div class="toolbar-actions">
+      <label class="toggle-label">
+        <input type="checkbox" id="autoCalcToggle" checked>
+        <span>Cálculos Automáticos</span>
+      </label>
+
+      <label class="toggle-label">
+        <span>Silhueta:</span>
+        <select id="silhouetteSelect" style="background:#1e293b; color:white; border:none; outline:none; cursor:pointer;">
+          <option value="female">Feminina</option>
+          <option value="male">Masculina</option>
+        </select>
+      </label>
+
+      <label class="btn btn-secondary" style="cursor:pointer;">
+        📷 Foto/Avatar
+        <input type="file" id="avatarUpload" accept="image/*" style="display:none;">
+      </label>
+
+      <button class="btn btn-success" onclick="exportCharacterJSON()">💾 Salvar (.json)</button>
+      
+      <label class="btn btn-secondary" style="cursor:pointer;">
+        📂 Carregar (.json)
+        <input type="file" id="jsonImportInput" accept=".json" onchange="importCharacterJSON(event)" style="display:none;">
+      </label>
+
+      <button class="btn" onclick="printSheet()">🖨️ Imprimir / Salvar PDF</button>
+    </div>
+  </header>
+
+  <main class="sheet-container">
+
+    <!-- ==================== PÁGINA 1 ==================== -->
+    <section class="sheet-page" id="page1">
+      <div class="sheet-header-logo">
+        <h1>GURPS</h1>
+      </div>
+
+      <!-- Top Character Details -->
+      <div class="top-info-grid">
+        <div class="info-box" style="grid-column: span 2;">
+          <label>Personagem</label>
+          <input type="text" id="personagem_nome" placeholder="Nome do Personagem" class="calc-trigger">
+        </div>
+        <div class="info-box" style="grid-column: span 3;">
+          <label>Jogador</label>
+          <input type="text" id="jogador_nome" placeholder="Nome do Jogador">
+        </div>
+      </div>
+
+      <div class="second-info-grid">
+        <div class="info-box">
+          <label>Conceito</label>
+          <input type="text" id="conceito">
+        </div>
+        <div class="info-box">
+          <label>Criação</label>
+          <input type="text" id="criacao">
+        </div>
+        <div class="info-box">
+          <label>Sequência</label>
+          <input type="text" id="sequencia">
+        </div>
+        <div class="info-box">
+          <label>XP a Gastar</label>
+          <input type="number" id="xp_agastar" class="xp-calc">
+        </div>
+        <div class="info-box">
+          <label>XP Total</label>
+          <input type="number" id="xp_total_header" readonly style="font-weight:bold;">
+        </div>
+      </div>
+
+      <div class="second-info-grid" style="grid-template-columns: 2fr 1.5fr 1.5fr 1fr 0.5fr 0.5fr;">
+        <div class="info-box"><label>Aparência</label><input type="text" id="aparencia"></div>
+        <div class="info-box"><label>Status</label><input type="text" id="status"></div>
+        <div class="info-box"><label>Reputação</label><input type="text" id="reputacao"></div>
+        <div class="info-box"><label>Reação</label><input type="text" id="reacao"></div>
+        <div class="info-box"><label>MT</label><input type="text" id="mt"></div>
+        <div class="info-box"><label>NT</label><input type="text" id="nt"></div>
+      </div>
+
+      <!-- Main Layout Page 1 -->
+      <div class="page1-main-grid">
+
+        <!-- Left Column: Primários, Secundários, Terciários -->
+        <div class="left-col">
+          
+          <!-- PRIMÁRIOS -->
+          <div class="section-box">
+            <div class="box-title">PRIMÁRIOS</div>
+            <div style="display:grid; grid-template-columns:1.2fr 1fr 1fr 1fr; text-align:center; font-size:0.6rem; font-weight:bold; margin-bottom:2px;">
+              <span>ATRIB.</span><span>VALOR</span><span>TEMP.</span><span>XP</span>
+            </div>
+            
+            <div class="primary-stat-row">
+              <span class="stat-badge">ST</span>
+              <input type="number" id="st_val" value="10" class="pill-input calc-trigger">
+              <input type="number" id="st_temp" class="pill-input-small">
+              <input type="number" id="st_xp" class="pill-input-small xp-calc">
+            </div>
+            <div class="primary-stat-row">
+              <span class="stat-badge">DX</span>
+              <input type="number" id="dx_val" value="10" class="pill-input calc-trigger">
+              <input type="number" id="dx_temp" class="pill-input-small">
+              <input type="number" id="dx_xp" class="pill-input-small xp-calc">
+            </div>
+            <div class="primary-stat-row">
+              <span class="stat-badge">IQ</span>
+              <input type="number" id="iq_val" value="10" class="pill-input calc-trigger">
+              <input type="number" id="iq_temp" class="pill-input-small">
+              <input type="number" id="iq_xp" class="pill-input-small xp-calc">
+            </div>
+            <div class="primary-stat-row">
+              <span class="stat-badge">HT</span>
+              <input type="number" id="ht_val" value="10" class="pill-input calc-trigger">
+              <input type="number" id="ht_temp" class="pill-input-small">
+              <input type="number" id="ht_xp" class="pill-input-small xp-calc">
+            </div>
+          </div>
+
+          <!-- SECUNDÁRIOS -->
+          <div class="section-box">
+            <div class="box-title">SECUNDÁRIOS</div>
+            
+            <!-- PV -->
+            <div style="margin-bottom:6px;">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span class="stat-badge">PV</span>
+                <input type="number" id="pv_val" class="pill-input calc-trigger" style="width:60px;">
+                <input type="number" id="pv_mod" placeholder="Mod" class="pill-input-small calc-trigger" style="width:45px;">
+                <input type="number" id="pv_xp" placeholder="XP" class="pill-input-small xp-calc" style="width:45px;">
+              </div>
+              <div style="display:flex; justify-content:space-around; font-size:0.65rem; margin-top:2px;">
+                <span>½ PV: <input type="number" id="pv_metade" style="width:35px; text-align:center;"></span>
+                <span>*1/3 PV: <input type="number" id="pv_terco" style="width:35px; text-align:center;"></span>
+              </div>
+            </div>
+
+            <!-- PER -->
+            <div style="margin-bottom:6px;">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span class="stat-badge" style="font-size:0.9rem;">PER</span>
+                <input type="number" id="per_val" class="pill-input calc-trigger" style="width:60px;">
+                <input type="number" id="per_mod" placeholder="Mod" class="pill-input-small calc-trigger" style="width:45px;">
+                <input type="number" id="per_xp" placeholder="XP" class="pill-input-small xp-calc" style="width:45px;">
+              </div>
+              <div style="display:grid; grid-template-columns:repeat(4, 1fr); font-size:0.58rem; text-align:center; margin-top:2px;">
+                <span>VISÃO<input type="number" id="per_visao" style="text-align:center;"></span>
+                <span>AUDIÇÃO<input type="number" id="per_audicao" style="text-align:center;"></span>
+                <span>TATO<input type="number" id="per_tato" style="text-align:center;"></span>
+                <span>PALADAR<input type="number" id="per_paladar" style="text-align:center;"></span>
+              </div>
+            </div>
+
+            <!-- VON -->
+            <div style="margin-bottom:6px;">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span class="stat-badge" style="font-size:0.9rem;">VON</span>
+                <input type="number" id="von_val" class="pill-input calc-trigger" style="width:60px;">
+                <input type="number" id="von_mod" placeholder="Mod" class="pill-input-small calc-trigger" style="width:45px;">
+                <input type="number" id="von_xp" placeholder="XP" class="pill-input-small xp-calc" style="width:45px;">
+              </div>
+            </div>
+
+            <!-- FAD -->
+            <div>
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span class="stat-badge" style="font-size:0.9rem;">FAD</span>
+                <input type="number" id="fad_val" class="pill-input calc-trigger" style="width:60px;">
+                <input type="number" id="fad_mod" placeholder="Mod" class="pill-input-small calc-trigger" style="width:45px;">
+                <input type="number" id="fad_xp" placeholder="XP" class="pill-input-small xp-calc" style="width:45px;">
+              </div>
+            </div>
+          </div>
+
+          <!-- TERCIÁRIOS -->
+          <div class="section-box">
+            <div class="box-title">TERCIÁRIOS</div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:4px; margin-bottom:4px; font-size:0.65rem;">
+              <div>
+                <label>VEL BÁS (HT+DX)/4</label>
+                <input type="text" id="vel_basica" class="pill-input-small calc-trigger">
+                <input type="number" id="vel_xp" placeholder="XP" class="pill-input-small xp-calc" style="margin-top:2px;">
+              </div>
+              <div>
+                <label>DESL BÁS</label>
+                <input type="text" id="desl_basico" class="pill-input-small calc-trigger">
+                <input type="number" id="desl_xp" placeholder="XP" class="pill-input-small xp-calc" style="margin-top:2px;">
+              </div>
+            </div>
+
+            <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:4px; margin-bottom:4px; font-size:0.65rem;">
+              <div>
+                <label>GDP</label>
+                <input type="text" id="gdp_val" class="pill-input-small" style="text-align:center;">
+              </div>
+              <div>
+                <label>BAL</label>
+                <input type="text" id="bal_val" class="pill-input-small" style="text-align:center;">
+              </div>
+              <div>
+                <label>ST GOLPE</label>
+                <input type="number" id="st_golpe" class="pill-input-small" style="text-align:center;">
+              </div>
+            </div>
+
+            <div style="font-size:0.65rem; margin-bottom:4px;">
+              <label>BASE CARGA (STxST/10kg)</label>
+              <div style="display:flex; gap:4px;">
+                <input type="text" id="base_carga" class="pill-input-small" style="width:50%;">
+                <input type="text" id="st_levantar" placeholder="Levantar" class="pill-input-small" style="width:50%;">
+              </div>
+            </div>
+
+            <div style="font-size:0.65rem;">
+              <label>PF POR TURNOS</label>
+              <div class="tracker-row">
+                <span class="tracker-dot"></span><span class="tracker-dot"></span>
+                <span class="tracker-dot"></span><span class="tracker-dot"></span>
+                <span class="tracker-dot"></span><span class="tracker-dot"></span>
+                <span class="tracker-dot"></span><span class="tracker-dot"></span>
+                <span class="tracker-dot"></span><span class="tracker-dot"></span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Center Column: Body Silhouette & Hit Locations -->
+        <div class="center-col">
+          <div class="silhouette-container">
+            <img id="silhouetteImg" src="assets/female_body.svg" class="silhouette-img" alt="Silhueta GURPS">
+
+            <!-- Hit Location Boxes -->
+            <div class="hit-loc-box loc-cranio">
+              <header>CRÂNIO -7</header>
+              <div class="hit-loc-inputs">
+                <div><label>RD</label><input type="text" id="rd_cranio"></div>
+                <div><label>PV</label><input type="text" id="pv_cranio"></div>
+              </div>
+              <div>• RD +2 • DN x4 • -10 nocaute</div>
+            </div>
+
+            <div class="hit-loc-box loc-olhos">
+              <header>OLHOS -9</header>
+              <div class="hit-loc-inputs">
+                <div><label>RD</label><input type="text" id="rd_olhos"></div>
+                <div><label>PV</label><input type="text" id="pv_olhos"></div>
+              </div>
+              <div>• PV/10 cega • -10 nocaute</div>
+            </div>
+
+            <div class="hit-loc-box loc-pesc">
+              <header>PESCOÇO -6</header>
+              <div class="hit-loc-inputs">
+                <div><label>RD</label><input type="text" id="rd_pesc"></div>
+                <div><label>PV</label><input type="text" id="pv_pesc"></div>
+              </div>
+              <div>• DN corte x 2</div>
+            </div>
+
+            <div class="hit-loc-box loc-rosto">
+              <header>ROSTO -5</header>
+              <div class="hit-loc-inputs">
+                <div><label>RD</label><input type="text" id="rd_rosto"></div>
+                <div><label>PV</label><input type="text" id="pv_rosto"></div>
+              </div>
+              <div>• PV cega • corrosão x1.5</div>
+            </div>
+
+            <div class="hit-loc-box loc-braco">
+              <header>BRAÇO -2 (-4)</header>
+              <div class="hit-loc-inputs">
+                <div><label>RD</label><input type="text" id="rd_braco"></div>
+                <div><label>PV</label><input type="text" id="pv_braco"></div>
+              </div>
+              <div>• DN max ½ PV incapacita</div>
+            </div>
+
+            <div class="loc-hand-pref">
+              <label><input type="radio" name="hand_pref" id="hand_destro" checked> Destro (-4)</label>
+              <label><input type="radio" name="hand_pref" id="hand_canhoto"> Canhoto (-4)</label>
+            </div>
+
+            <div class="hit-loc-box loc-torso">
+              <header>TORSO 0 (-3)</header>
+              <div class="hit-loc-inputs">
+                <div><label>RD</label><input type="text" id="rd_torso"></div>
+                <div><label>PV</label><input type="text" id="pv_torso"></div>
+              </div>
+              <div>• Órgãos vitais -3 • perf. x3</div>
+            </div>
+
+            <div class="hit-loc-box loc-mao">
+              <header>MÃO -4 (-8)</header>
+              <div class="hit-loc-inputs">
+                <div><label>RD</label><input type="text" id="rd_mao"></div>
+                <div><label>PV</label><input type="text" id="pv_mao"></div>
+              </div>
+              <div>• DN max = PV/3 incapacita</div>
+            </div>
+
+            <div class="hit-loc-box loc-virilha">
+              <header>VIRILHA -3</header>
+              <div class="hit-loc-inputs">
+                <div><label>RD</label><input type="text" id="rd_virilha"></div>
+                <div><label>PV</label><input type="text" id="pv_virilha"></div>
+              </div>
+              <div>• DN contusão x2 • -5 nocaute</div>
+            </div>
+
+            <div class="hit-loc-box loc-perna">
+              <header>PERNA -2</header>
+              <div class="hit-loc-inputs">
+                <div><label>RD</label><input type="text" id="rd_perna"></div>
+                <div><label>PV</label><input type="text" id="pv_perna"></div>
+              </div>
+              <div>• DN max ½ PV incapacita</div>
+            </div>
+
+            <div class="hit-loc-box loc-pe">
+              <header>PÉ -4</header>
+              <div class="hit-loc-inputs">
+                <div><label>RD</label><input type="text" id="rd_pe"></div>
+                <div><label>PV</label><input type="text" id="pv_pe"></div>
+              </div>
+              <div>• DN max = PV/3 incapacita</div>
+            </div>
+
+            <!-- Notes & Rules Footer Inside Body Box -->
+            <div class="body-notes-box">
+              <strong>FERIMENTO GRAVE = ½ PV</strong> | <strong>CHOQUE</strong> = DX e IQ reduzidos no valor do dano. Máx: -4.<br>
+              <strong>NOCAUTE</strong> = teste HT (-5 rosto, org. vitais, virilha; -10 crânio e olhos). Se falhar por 5+ PJ desmaia, senão fica ATORDOADO (-4 defesas ativas).
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column: Defesas Ativas, Combate & Perícias -->
+        <div class="right-col">
+          
+          <!-- DEFESAS ATIVAS -->
+          <div class="section-box">
+            <div class="box-title">DEFESAS ATIVAS</div>
+            <div class="defenses-grid">
+              <div class="defense-item">
+                <label>ESQUIVA</label>
+                <input type="number" id="esquiva_val" class="pill-input-small">
+              </div>
+              <div class="defense-item">
+                <label>APARAR</label>
+                <input type="number" id="aparar_val" class="pill-input-small">
+              </div>
+              <div class="defense-item">
+                <label>BLOQUEIO</label>
+                <input type="number" id="bloqueio_val" class="pill-input-small">
+              </div>
+              <div class="defense-item">
+                <label>ESCUDO</label>
+                <input type="text" id="escudo_bd" placeholder="BD" style="font-size:0.7rem; text-align:center;">
+              </div>
+            </div>
+          </div>
+
+          <!-- PERÍCIAS -->
+          <div class="section-box">
+            <div class="box-title" style="display:flex; justify-content:space-between; align-items:center;">
+              <span>PERÍCIAS</span>
+              <button class="btn btn-secondary btn-add-row" style="padding:2px 6px; font-size:0.7rem;" onclick="addTableRow('skillsTable', '<td><input type=text class=sk-name placeholder=Perícia></td><td><input type=number class=sk-nh placeholder=NH style=text-align:center></td><td><input type=text class=sk-rel style=text-align:center></td><td><input type=number class=sk-xp class=xp-calc style=text-align:center></td><td style=text-align:center><button onclick=removeTableRow(this) class=btn-del-row style=background:none;border:none;cursor:pointer>❌</button></td>')">+ Adicionar</button>
+            </div>
+            <table class="table-gurps" id="skillsTable">
+              <thead>
+                <tr>
+                  <th style="width:50%;">PERÍCIA</th>
+                  <th>NH</th>
+                  <th>NH rel.</th>
+                  <th>XP</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><input type="text" placeholder="Esgrima / Espada"></td>
+                  <td><input type="number" style="text-align:center;"></td>
+                  <td><input type="text" style="text-align:center;" placeholder="DX+1"></td>
+                  <td><input type="number" class="skill-xp xp-calc" style="text-align:center;"></td>
+                  <td style="text-align:center;"><button onclick="removeTableRow(this)" class="btn-del-row" style="background:none;border:none;cursor:pointer">❌</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- Bottom Tables: Encumbrance & Fatigue -->
+      <div style="margin-top:10px; border:2px solid #000; border-radius:8px; padding:6px;">
+        <div class="box-title">FADIGA, NÍVEL DE CARGA, DESLOCAMENTO E ESQUIVA</div>
+        <table class="table-gurps" style="margin-bottom:0; font-size:0.7rem;">
+          <thead>
+            <tr>
+              <th>FADIGA</th>
+              <th>NÍVEL DE CARGA</th>
+              <th>CARGA MÁX.</th>
+              <th>DESLOC. BÁSICO</th>
+              <th>ESQUIVA</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1 PF</td>
+              <td>NULA (0)</td>
+              <td><input type="text" id="bc_nula" readonly style="text-align:center;"></td>
+              <td>DB Normal</td>
+              <td><input type="text" id="esq_nula" readonly style="text-align:center;"></td>
+            </tr>
+            <tr>
+              <td>2 PF</td>
+              <td>LEVE (1)</td>
+              <td><input type="text" id="bc_leve" readonly style="text-align:center;"></td>
+              <td>DB x 0,8</td>
+              <td><input type="text" id="esq_leve" readonly style="text-align:center;"></td>
+            </tr>
+            <tr>
+              <td>3 PF</td>
+              <td>MÉDIA (2)</td>
+              <td><input type="text" id="bc_media" readonly style="text-align:center;"></td>
+              <td>DB x 0,6</td>
+              <td><input type="text" id="esq_media" readonly style="text-align:center;"></td>
+            </tr>
+            <tr>
+              <td>4 PF</td>
+              <td>PESADA (3)</td>
+              <td><input type="text" id="bc_pesada" readonly style="text-align:center;"></td>
+              <td>DB x 0,4</td>
+              <td><input type="text" id="esq_pesada" readonly style="text-align:center;"></td>
+            </tr>
+            <tr>
+              <td>5 PF</td>
+              <td>MT. PESADA (4)</td>
+              <td><input type="text" id="bc_mtpesada" readonly style="text-align:center;"></td>
+              <td>DB x 0,2</td>
+              <td><input type="text" id="esq_mtpesada" readonly style="text-align:center;"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </section>
+
+    <!-- ==================== PÁGINA 2 ==================== -->
+    <section class="sheet-page" id="page2">
+      <div class="sheet-header-logo">
+        <h1>GURPS</h1>
+      </div>
+
+      <!-- ARMAS DE MÃO -->
+      <div class="section-box">
+        <div class="box-title" style="display:flex; justify-content:space-between; align-items:center;">
+          <span>ARMAS DE MÃO</span>
+          <button class="btn btn-secondary btn-add-row" style="padding:2px 6px; font-size:0.7rem;" onclick="addTableRow('handWeaponsTable', '<td><input type=text></td><td><input type=text></td><td><input type=text></td><td><input type=text></td><td><input type=text></td><td><input type=text></td><td><input type=number class=eq-cost class=equip-calc style=text-align:center></td><td><input type=number class=eq-weight class=equip-calc style=text-align:center></td><td style=text-align:center><button onclick=removeTableRow(this) class=btn-del-row style=background:none;border:none;cursor:pointer>❌</button></td>')">+ Adicionar</button>
+        </div>
+        <table class="table-gurps" id="handWeaponsTable">
+          <thead>
+            <tr>
+              <th style="width:30%;">ARMA</th>
+              <th>DANO</th>
+              <th>ALC.</th>
+              <th>APARAR</th>
+              <th>ST</th>
+              <th>OBS.</th>
+              <th>$</th>
+              <th>Kg</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><input type="text" placeholder="Espada Longa"></td>
+              <td><input type="text" placeholder="bal+1 corte"></td>
+              <td><input type="text" placeholder="1, 2"></td>
+              <td><input type="text" placeholder="0"></td>
+              <td><input type="text" placeholder="10"></td>
+              <td><input type="text"></td>
+              <td><input type="number" class="eq-cost equip-calc" placeholder="700"></td>
+              <td><input type="number" class="eq-weight equip-calc" placeholder="1.5"></td>
+              <td style="text-align:center;"><button onclick="removeTableRow(this)" class="btn-del-row" style="background:none;border:none;cursor:pointer">❌</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- LONGO ALCANCE -->
+      <div class="section-box">
+        <div class="box-title" style="display:flex; justify-content:space-between; align-items:center;">
+          <span>LONGO ALCANCE</span>
+          <button class="btn btn-secondary btn-add-row" style="padding:2px 6px; font-size:0.7rem;" onclick="addTableRow('rangedWeaponsTable', '<td><input type=text></td><td><input type=text></td><td><input type=text></td><td><input type=text></td><td><input type=text></td><td><input type=text></td><td><input type=text></td><td><input type=text></td><td><input type=text></td><td><input type=text></td><td><input type=number class=eq-cost class=equip-calc style=text-align:center></td><td><input type=number class=eq-weight class=equip-calc style=text-align:center></td><td style=text-align:center><button onclick=removeTableRow(this) class=btn-del-row style=background:none;border:none;cursor:pointer>❌</button></td>')">+ Adicionar</button>
+        </div>
+        <table class="table-gurps" id="rangedWeaponsTable">
+          <thead>
+            <tr>
+              <th style="width:25%;">ARMA</th>
+              <th>DANO</th>
+              <th>PREC</th>
+              <th>ALC.</th>
+              <th>CDT</th>
+              <th>TIROS</th>
+              <th>ST</th>
+              <th>MAG.</th>
+              <th>RCO</th>
+              <th>CL</th>
+              <th>$</th>
+              <th>Kg</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><input type="text" placeholder="Arco Composto"></td>
+              <td><input type="text" placeholder="gdp+2 perf"></td>
+              <td><input type="text" placeholder="3"></td>
+              <td><input type="text" placeholder="x15/x20"></td>
+              <td><input type="text" placeholder="1"></td>
+              <td><input type="text" placeholder="1(2)"></td>
+              <td><input type="text" placeholder="11†"></td>
+              <td><input type="text"></td>
+              <td><input type="text"></td>
+              <td><input type="text"></td>
+              <td><input type="number" class="eq-cost equip-calc" placeholder="900"></td>
+              <td><input type="number" class="eq-weight equip-calc" placeholder="1.0"></td>
+              <td style="text-align:center;"><button onclick="removeTableRow(this)" class="btn-del-row" style="background:none;border:none;cursor:pointer">❌</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Page 2 Grid: Advantages/Disadvantages vs Equipments -->
+      <div class="page2-tables-grid">
+
+        <!-- Left: Vantagens & Desvantagens -->
+        <div>
+          <!-- VANTAGENS & QUALIDADES -->
+          <div class="section-box">
+            <div class="box-title" style="display:flex; justify-content:space-between; align-items:center;">
+              <span>VANTAGENS & QUALIDADES</span>
+              <button class="btn btn-secondary btn-add-row" style="padding:2px 6px; font-size:0.7rem;" onclick="addTableRow('advTable', '<td><input type=text></td><td style=width:60px><input type=number class=adv-xp class=xp-calc style=text-align:center></td><td style=text-align:center><button onclick=removeTableRow(this) class=btn-del-row style=background:none;border:none;cursor:pointer>❌</button></td>')">+ Adicionar</button>
+            </div>
+            <table class="table-gurps" id="advTable">
+              <thead>
+                <tr>
+                  <th>VANTAGEM</th>
+                  <th style="width:60px;">XP</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><input type="text" placeholder="Reflexos de Combate"></td>
+                  <td><input type="number" class="adv-xp xp-calc" value="15" style="text-align:center;"></td>
+                  <td style="text-align:center;"><button onclick="removeTableRow(this)" class="btn-del-row" style="background:none;border:none;cursor:pointer">❌</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- DESVANTAGENS & PECULIARIDADES -->
+          <div class="section-box">
+            <div class="box-title" style="display:flex; justify-content:space-between; align-items:center;">
+              <span>DESVANTAGENS & PECULIARIDADES</span>
+              <button class="btn btn-secondary btn-add-row" style="padding:2px 6px; font-size:0.7rem;" onclick="addTableRow('disadvTable', '<td><input type=text></td><td style=width:60px><input type=number class=disadv-xp class=xp-calc style=text-align:center></td><td style=text-align:center><button onclick=removeTableRow(this) class=btn-del-row style=background:none;border:none;cursor:pointer>❌</button></td>')">+ Adicionar</button>
+            </div>
+            <table class="table-gurps" id="disadvTable">
+              <thead>
+                <tr>
+                  <th>DESVANTAGEM</th>
+                  <th style="width:60px;">XP</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><input type="text" placeholder="Honra dos Cavaleiros"></td>
+                  <td><input type="number" class="disadv-xp xp-calc" value="-15" style="text-align:center;"></td>
+                  <td style="text-align:center;"><button onclick="removeTableRow(this)" class="btn-del-row" style="background:none;border:none;cursor:pointer">❌</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Right: Equipamentos, Resumo de Pontos & Tabela Velocidade/Alcance -->
+        <div>
+          
+          <!-- EQUIPAMENTOS -->
+          <div class="section-box">
+            <div class="box-title" style="display:flex; justify-content:space-between; align-items:center;">
+              <span>EQUIPAMENTOS</span>
+              <button class="btn btn-secondary btn-add-row" style="padding:2px 6px; font-size:0.7rem;" onclick="addTableRow('equipTable', '<td><input type=text placeholder=Item></td><td style=width:50px><input type=number class=eq-quant class=equip-calc value=1 style=text-align:center></td><td style=width:60px><input type=number class=eq-cost class=equip-calc style=text-align:center></td><td style=width:60px><input type=number class=eq-weight class=equip-calc style=text-align:center></td><td style=text-align:center><button onclick=removeTableRow(this) class=btn-del-row style=background:none;border:none;cursor:pointer>❌</button></td>')">+ Adicionar</button>
+            </div>
+            <table class="table-gurps" id="equipTable">
+              <thead>
+                <tr>
+                  <th>ITEM</th>
+                  <th style="width:50px;">QTD</th>
+                  <th style="width:60px;">$</th>
+                  <th style="width:60px;">Kg</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><input type="text" placeholder="Mochila de Lona"></td>
+                  <td><input type="number" class="eq-quant equip-calc" value="1" style="text-align:center;"></td>
+                  <td><input type="number" class="eq-cost equip-calc" value="60" style="text-align:center;"></td>
+                  <td><input type="number" class="eq-weight equip-calc" value="1.5" style="text-align:center;"></td>
+                  <td style="text-align:center;"><button onclick="removeTableRow(this)" class="btn-del-row" style="background:none;border:none;cursor:pointer">❌</button></td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr style="font-weight:bold; background:#f0f0f0;">
+                  <td colspan="2" style="text-align:right;">TOTAL:</td>
+                  <td id="total_equip_cost" style="text-align:center;">$ 0.00</td>
+                  <td id="total_equip_weight" style="text-align:center;">0.00 kg</td>
+                  <td></td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+
+          <!-- RESUMO DOS PONTOS -->
+          <div class="section-box">
+            <div class="box-title">RESUMO DOS PONTOS</div>
+            <table class="summary-table">
+              <tr><td>Atributos Primários</td><td style="width:60px;"><input type="number" id="sum_primarios" readonly style="text-align:center;"></td></tr>
+              <tr><td>Características Secundárias</td><td><input type="number" id="sum_secundarios" readonly style="text-align:center;"></td></tr>
+              <tr><td>Características Terciárias</td><td><input type="number" id="sum_terciarios" readonly style="text-align:center;"></td></tr>
+              <tr><td>Perícias / Técnicas</td><td><input type="number" id="sum_pericias" readonly style="text-align:center;"></td></tr>
+              <tr><td>Vantagens & Qualidades</td><td><input type="number" id="sum_vantagens" readonly style="text-align:center;"></td></tr>
+              <tr><td>Desvantagens & Peculiaridades</td><td><input type="number" id="sum_desvantagens" readonly style="text-align:center;"></td></tr>
+              <tr class="total-row"><td>TOTAL DE PONTOS</td><td><input type="number" id="sum_total" readonly style="text-align:center; font-weight:bold;"></td></tr>
+            </table>
+          </div>
+
+          <!-- VELOCIDADE E ALCANCE (Tabela Oficial) -->
+          <div class="section-box">
+            <div class="box-title">VELOCIDADE E ALCANCE</div>
+            <div style="font-size:0.6rem; display:grid; grid-template-columns:1fr 1fr; gap:4px; text-align:center;">
+              <div><strong>Mod. Veloc/Alc</strong> | <strong>Distância</strong></div>
+              <div><strong>Mod. Veloc/Alc</strong> | <strong>Distância</strong></div>
+              <div>0 : 2m</div><div>-8 : 50m</div>
+              <div>-1 : 3m</div><div>-9 : 70m</div>
+              <div>-2 : 5m</div><div>-10 : 100m</div>
+              <div>-3 : 7m</div><div>-11 : 150m</div>
+              <div>-4 : 10m</div><div>-12 : 200m</div>
+              <div>-5 : 15m</div><div>-13 : 300m</div>
+              <div>-6 : 20m</div><div>-14 : 500m</div>
+              <div>-7 : 30m</div><div>-15 : 700m</div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -274,7 +274,7 @@ function serializeTables() {
 function exportCharacterJSON() {
   const data = {};
   document.querySelectorAll('input[id], textarea[id], select[id]').forEach(el => {
-    if (el.type === 'checkbox') {
+    if (el.type === 'checkbox' || el.type === 'radio') {
       data[el.id] = el.checked;
     } else {
       data[el.id] = el.value;
@@ -333,7 +333,7 @@ function importCharacterJSON(event) {
         if (key === '_tables') return;
         const el = document.getElementById(key);
         if (el) {
-          if (el.type === 'checkbox') {
+          if (el.type === 'checkbox' || el.type === 'radio') {
             el.checked = data[key];
           } else {
             el.value = data[key];
@@ -358,7 +358,7 @@ function printSheet() {
 function saveLocalDraft() {
   const data = {};
   document.querySelectorAll('input[id], textarea[id], select[id]').forEach(el => {
-    if (el.type === 'checkbox') {
+    if (el.type === 'checkbox' || el.type === 'radio') {
       data[el.id] = el.checked;
     } else {
       data[el.id] = el.value;
@@ -393,7 +393,7 @@ function loadLocalDraft() {
       if (key === '_tables') return;
       const el = document.getElementById(key);
       if (el) {
-        if (el.type === 'checkbox') {
+        if (el.type === 'checkbox' || el.type === 'radio') {
           el.checked = data[key];
         } else {
           el.value = data[key];
